@@ -1,0 +1,34 @@
+---
+version: "3.5"
+services:
+  jellyfin:
+    # image: lscr.io/linuxserver/jellyfin:latest
+    image: jellyfin/jellyfin:10.8.0
+    container_name: jf
+    # privileged: true
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - ./config:/config
+      # - /mnt/ramdisk/jf/transcodes:/config/transcodes
+      # - /mnt/ramdisk/jf/log:/config/log
+      - ./media:/media/
+    ports:
+      - "${IP4_ADDR}:80:8096"
+    restart: 'unless-stopped'
+    devices:
+      - /dev/video10:/dev/video10
+      - /dev/video11:/dev/video11
+      - /dev/video12:/dev/video12
+# Note: Rpi4 currently doesn't support HWA decoding, only HWA encoding of H.264. 
+# Active cooling is required, passive cooling is insufficient for transcoding. 
+# For Rpi3 in testing, transcoding was not working fast enough to run in real 
+# time because the video was being resized.      
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+
+
