@@ -1,0 +1,3 @@
+# jellyfin
+
+Uses hardware acceleration
